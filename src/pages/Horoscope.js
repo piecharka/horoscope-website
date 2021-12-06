@@ -12,10 +12,12 @@ const Horoscope = () => {
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [isFetched, setIsFetched] = useState(false);
 
   const fetchDataHandler = useCallback(async () => {
     setIsLoading(true);
     setError(null);
+
     const url = `https://aztro.sameerkumar.website/?sign=${ctx.sign.toLowerCase()}&day=today`;
     try {
       const response = await fetch(url, {
@@ -26,6 +28,7 @@ const Horoscope = () => {
       }
       const json = await response.json();
       setData(json);
+      setIsFetched(true);
     } catch (err) {
       setError(err.message || "Something went wrong!");
       setIsLoading(false);
@@ -44,6 +47,7 @@ const Horoscope = () => {
           description={data.description}
           isLoading={isLoading}
           error={error}
+          fetched={isFetched}
         />
       </Route>
       <Route path={`${match.path}/luck`}>
